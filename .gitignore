@@ -1,0 +1,10 @@
+# PyInstaller
+dist/
+build/
+*.spec
+
+# Opcional: archivos temporales de PyInstaller
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

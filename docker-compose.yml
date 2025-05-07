@@ -1,0 +1,71 @@
+
+version: "3.8"
+
+services:
+  redis:
+    image: redis
+    container_name: redis-server
+    restart: always
+    ports:
+      - "6379:6379"
+
+  processor:
+    build: ./processor
+    image: processor
+    container_name: processor
+    restart: always
+    volumes:
+      - ./processor/.:/app:rw
+    depends_on:
+      - redis
+    command: ["python", "main.py"]
+
+  detector:
+    build: ./detector
+    image: detector
+    container_name: detector
+
+  detector_cam1:
+    image: detector
+    container_name: detector_cam1
+    restart: always
+    volumes:
+      - ./detector/.:/app
+    runtime: nvidia 
+    depends_on:
+      - redis
+      - detector
+      - processor
+    pull_policy: never
+    command: ["python3", "main.py", "--camara-id", "1"]
+    deploy:
+      resources:
+        limits:
+          cpus: "1.5"
+          memory: 1000m
+        reservations:
+          cpus: "0.5"
+          memory: 512m
+
+
+  detector_cam2:
+    image: detector
+    container_name: detector_cam2
+    restart: always
+    runtime: nvidia 
+    volumes:
+      - ./detector/.:/app
+    depends_on:
+      - redis
+      - detector
+      - processor
+    pull_policy: never
+    command: ["python3", "main.py", "--camara-id", "2"]
+    deploy:
+      resources:
+        limits:
+          cpus: "1.5"
+          memory: 1000m
+        reservations:
+          cpus: "0.5"
+          memory: 512m

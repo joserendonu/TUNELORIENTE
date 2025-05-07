@@ -1,0 +1,8 @@
+{
+  "1": {
+      "nombre": "mock_nombre",
+      "url": "rtsp://mock_source/stream",
+      "region": [[300,600], [1850,600], [2050,1200], [1,1200], [1,850]],
+      "clases": [0,3,4,5,6]
+  }
+}
